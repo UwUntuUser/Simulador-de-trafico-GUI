@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import simulator.misc.SortedArrayList;
 
-public class TrafficSimulator {
+public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	
 	private RoadMap mapaCarreteras;
 	private SortedArrayList<Event> listaEventos;
@@ -24,9 +24,6 @@ public class TrafficSimulator {
 		this.tiempo= 0 ;
 		this.tiempoActual = 0;
 	}
-	
-	
-	
 	public void setTiempo(int t)
 	{
 		this.tiempo=t;
@@ -34,10 +31,12 @@ public class TrafficSimulator {
 	public void addEvent(Event e)
 	{
 		this.listaEventos.add(e);
+		//onEventAdded
 	}
 	public void advance()
 	{
 		this.tiempoActual++;
+		//onAdvanceStart
 		List<Event> auxiliar = new ArrayList<Event>();
 		for(int i=0;i<listaEventos.size();i++)
 		{
@@ -60,12 +59,15 @@ public class TrafficSimulator {
 			cruces.get(i).advance(tiempo);
 		for(int i=0;i<carreteras.size();i++)
 			carreteras.get(i).advance(tiempo);
+		
+		//onAdvanceEnd
 	}
 	public void reset()
 	{
 		this.mapaCarreteras.reset();
 		this.listaEventos.clear();
 		this.tiempo=0;
+		//onReset
 	}
 	public JSONObject report()
 	{
@@ -77,6 +79,21 @@ public class TrafficSimulator {
 		j.put("state", this.mapaCarreteras.report());
 		
 		return j;
+	}
+	public void addObserver(TrafficSimObserver o) {
+		// TODO Auto-generated method stub
+		
+		
+		//onRegister
+		
+	}
+
+
+
+	@Override
+	public void removeObserver(TrafficSimObserver o) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

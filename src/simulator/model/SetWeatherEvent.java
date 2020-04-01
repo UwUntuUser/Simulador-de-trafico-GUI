@@ -8,7 +8,7 @@ import simulator.misc.Pair;
 public class SetWeatherEvent extends Event{
 
 	private List<Pair<String,Weather>> lista;
-	
+	private int id;
 	public SetWeatherEvent(int time,List<Pair<String,Weather>>ws) throws IllegalArgumentException{
 		super(time);
 		if(ws== null)
@@ -28,6 +28,11 @@ public class SetWeatherEvent extends Event{
 				r.setCondicionesAmbientales(par.getSecond());
 		}
 
+	}
+	
+	public String toString()
+	{
+		return "Set Weather ' " + this.id + " ' ";
 	}
 
 }

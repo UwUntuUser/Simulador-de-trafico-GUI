@@ -35,4 +35,11 @@ public class NewVehicleEvent extends Event{
 		map.addVehicle(v);
 		v.moveToNextRoad();
 	}
+	
+	
+	public String toString()
+	{
+		return "New Vehicle ' " + this.id + " ' ";
+	}
+
 }

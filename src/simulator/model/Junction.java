@@ -1,6 +1,7 @@
 package simulator.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,8 @@ public class Junction extends SimulatedObject{
 			{
 				this.estrategia=lsStrategy;
 				this.estrategiaExtraer=dqStrategy;
-				this.X=xCoor;
-				this.Y=yCoor;
+				this.setX(xCoor);
+				this.setY(yCoor);
 				this.carreterasEntrantes= new ArrayList<Road>();
 				this.carreterasSalientes = new HashMap<Junction, Road>();
 				this.ListaColas = new ArrayList<List<Vehicle>>();
@@ -140,5 +141,27 @@ public class Junction extends SimulatedObject{
 		this.semaforoVerde = semaforoVerde;
 	}
 	
+	public List<Road> getIncomingRoads()
+	{
+		
+		List<Road> incoming = Collections.unmodifiableList(new ArrayList<Road>(this.carreterasEntrantes));
+		return incoming;
+	}
+
+	public int getX() {
+		return X;
+	}
+
+	public void setX(int x) {
+		X = x;
+	}
+
+	public int getY() {
+		return Y;
+	}
+
+	public void setY(int y) {
+		Y = y;
+	}
 
 }

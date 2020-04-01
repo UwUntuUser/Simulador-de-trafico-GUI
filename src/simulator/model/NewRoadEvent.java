@@ -40,4 +40,8 @@ public abstract class NewRoadEvent extends Event{
 	
 	public abstract Road createRoadObject(String id, Junction src, Junction dest, int velocidad, int co2Limit, int length, Weather tiempo);
 
+	public String toString()
+	{
+		return "New Road ' " + this.id + " ' ";
+	}
 }

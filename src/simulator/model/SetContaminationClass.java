@@ -8,7 +8,7 @@ import simulator.misc.Pair;
 public class SetContaminationClass extends Event{
 
 	private List<Pair<String,Integer>> lista;
-	
+	private int id;
 	public SetContaminationClass(int time,List<Pair<String,Integer>>cs) throws IllegalArgumentException{
 		super(time);
 		if(cs == null)
@@ -29,6 +29,11 @@ public class SetContaminationClass extends Event{
 			else
 				v.setContaminacionTotal(par.getSecond());
 		}
+	}
+	
+	public String toString()
+	{
+		return "Set contamination ' " + this.id + " ' ";
 	}
 
 }

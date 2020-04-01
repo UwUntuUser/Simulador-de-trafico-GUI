@@ -2,12 +2,15 @@ package simulator.launcher;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -18,6 +21,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import simulator.model.*;
+import simulator.view.MainWindow;
 import simulator.control.*;
 import simulator.factories.*;
 
@@ -137,11 +141,32 @@ public class Main {
 		in.close(); 
 		System.out.println("Done!");
 	}
+	private static void startGUIMode() throws IOException
+	{
+		//TODO
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				TrafficSimulator sim= new TrafficSimulator();
+				InputStream in = null;
+				try {
+					in = new FileInputStream(new File(_inFile));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				Controller c= new Controller(sim, Main._eventsFactory);
+				c.loadEvents(in);
+				new MainWindow(c);
+			}
+		});
 
+	}
 	private static void start(String[] args) throws IOException {
 		initFactories();
 		parseArgs(args);
 		startBatchMode();
+		startGUIMode();
 	}
 
 	private static void setNonDefaultTime(int t)
