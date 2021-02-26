@@ -75,8 +75,8 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		for (Road r : _map.getRoads()) {
 
 			// the road goes from (x1,y1) to (x2,y2)
-			int x1 = r.getDestino().getX();
-			int y1 = r.getDestino().getY();
+			int x1 = r.getOrigen().getX();
+			int y1 = r.getOrigen().getY();
 			int x2 = r.getDestino().getX();
 			int y2 = r.getDestino().getY();
 
@@ -108,8 +108,8 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 				// corresponding road. It is calculated relativly to the length of the road, and
 				// the location on the vehicle.
 				Road r = v.getRoad();
-				int x1 = r.getDestino().getX();
-				int y1 = r.getDestino().getY();
+				int x1 = r.getOrigen().getX();
+				int y1 = r.getOrigen().getY();
 				int x2 = r.getDestino().getX();
 				int y2 = r.getDestino().getY();
 				double roadLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
@@ -164,8 +164,10 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		}
 		maxW += 20;
 		maxH += 20;
-		setPreferredSize(new Dimension(maxW, maxH));
-		setSize(new Dimension(maxW, maxH));
+		if (maxW > getWidth() || maxH > getHeight()) {
+		    setPreferredSize(new Dimension(maxW, maxH));
+		   setSize(new Dimension(maxW, maxH));
+		}
 	}
 
 	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.
@@ -212,6 +214,11 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 
 	public void update(RoadMap map) {
 		_map = map;
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		repaint();
 	}
 
@@ -241,6 +248,8 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 
 	@Override
 	public void onError(String err) {
+		System.out.println(err);
+
 	}
 
 }

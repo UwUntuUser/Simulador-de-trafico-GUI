@@ -39,9 +39,9 @@ public abstract class NewRoadEventBuilder extends Builder<Event>{
 		this.co2= co2;
 		this.velMax = velMax;
 		this.w=w;
-		return createTheRoad(time,id,src,dest,length,co2,velMax,w);
+		return createTheRoad();
 	}
 	
-	public abstract Event createTheRoad(int time, String id, String src,String dst, int length,int co2,int vel, Weather w);
+	public abstract Event createTheRoad();
 
 }

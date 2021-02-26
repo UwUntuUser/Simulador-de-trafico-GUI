@@ -4,10 +4,11 @@ public class NewJunctionEvent extends Event {
 
 	
 	private Junction cruce;
-	private int id;
+	private String id;
 	public NewJunctionEvent(int time, String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor)  {
 		super(time);
-		cruce = new Junction(id, lsStrategy, dqStrategy, yCoor, yCoor);
+		cruce = new Junction(id, lsStrategy, dqStrategy, xCoor, yCoor);
+		this.id=id;
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class InterCityRoad extends Road {
 				break;
 		}
 		int reducir=(int)((100.0-x)/100.0)*tc;
-		this.addContaminacion(reducir);
+		this.modificarContaminacion(-reducir);
 	}
 
 	@Override

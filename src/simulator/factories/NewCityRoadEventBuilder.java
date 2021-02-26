@@ -16,9 +16,9 @@ public class NewCityRoadEventBuilder extends NewRoadEventBuilder{
 
 
 	@Override
-	public Event createTheRoad(int time, String id, String src, String dst,int length,int co2, int vel, Weather w) {
+	public Event createTheRoad() {
 		
-		return new NewCityRoadEvent(time, id, src,dst,length,co2,vel,w);
+		return new NewCityRoadEvent(time, id, src,dest,length,co2,velMax,w);
 	}
 
 

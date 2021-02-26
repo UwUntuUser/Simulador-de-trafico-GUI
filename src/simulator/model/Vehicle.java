@@ -58,9 +58,8 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle>{
 	
 	void moveToNextRoad() throws IllegalArgumentException
 	{
-
 		if(this.estado != VehicleStatus.PENDING && this.estado != VehicleStatus.WAITING)
-			throw new IllegalArgumentException("Excepcion en moveToNextRoad de Vehicle");
+				throw new IllegalArgumentException("Excepcion en moveToNextRoad de Vehicle");
 		else
 		{
 			if(this.estado== VehicleStatus.PENDING) // en el primer cruce
@@ -74,12 +73,19 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle>{
 			else // en el resto de cruces
 			{
 				Junction j = this.carretera.getDestino();
-				this.carretera.exit(this);
+				if(this.carretera!=null)
+					this.carretera.exit(this);
 				this.localizacion = 0;
 				this.VelocidadActual=0;
 				this.cruceActual++;
 				Junction siguiente = this.itinerario.get(this.cruceActual);
 				Road r = j.roadTo(siguiente);
+				if(siguiente == null)
+					{
+						this.estado=VehicleStatus.ARRIVED;
+					}
+				else
+					this.estado=VehicleStatus.TRAVELING;
 				r.enter(this);
 			}
 		}
@@ -87,21 +93,30 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle>{
 	
 	
 	@Override
-	void advance(int time) {
+	void advance(int time) throws IllegalArgumentException { 
 		if(this.estado == VehicleStatus.TRAVELING)
 		{
-			int minimo= Math.min(this.localizacion+this.VelocidadActual, this.carretera.getLonguitud());
-			this.localizacion+=minimo;
-			int contaminacion= this.gradoContaminacion*minimo;
+			int antigua=this.localizacion;
+			localizacion = Math.min(this.localizacion+this.VelocidadActual, this.carretera.getLonguitud());
+			int contaminacion= this.gradoContaminacion*(localizacion-antigua);
 			this.setContaminacionTotal(this.getContaminacionTotal() + contaminacion);
 			this.carretera.addContaminacion(contaminacion);
-			if(minimo>=this.carretera.getLonguitud()) 
+			if(localizacion>=this.carretera.getLonguitud()) // he llegado al final
 			{
 				Junction j = this.carretera.getDestino();
-				j.enter(this);
-				this.estado = VehicleStatus.WAITING;
+				if(j!=this.itinerario.get(this.itinerario.size()-1))
+				{
+					j.enter(this);
+					this.estado = VehicleStatus.WAITING;
+				}
+				else
+				{
+					this.estado = VehicleStatus.ARRIVED;
+					this.carretera.exit(this);
+				}
+
 			}
-			this.distanciaTotal+=minimo;
+			this.distanciaTotal+=localizacion;
 		}
 	}
 
@@ -151,7 +166,9 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle>{
 		return contaminacionTotal;
 	}
 	public void setContaminacionTotal(int contaminacionTotal) {
-		this.contaminacionTotal += contaminacionTotal;
+		if(this.contaminacionTotal < Integer.MAX_VALUE && this.contaminacionTotal >= 0)
+			this.contaminacionTotal += contaminacionTotal;
+
 	}
 	public VehicleStatus getEstado()
 	{
@@ -176,6 +193,14 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle>{
 	public int getGradoContaminacion()
 	{
 		return this.gradoContaminacion;
+	}
+	public List<Junction> getItinerario()
+	{
+		return this.itinerario;
+	}
+	public int getVelMax()
+	{
+		return this.VelocidadMaxima;
 	}
 	@Override
 	public int compareTo(Vehicle o) { 

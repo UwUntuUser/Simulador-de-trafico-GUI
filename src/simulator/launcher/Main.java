@@ -73,6 +73,8 @@ public class Main {
 		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
 		cmdLineOptions.addOption(Option.builder("t").longOpt("time").hasArg().desc("Set time").build());
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg().desc("Execution Mode. Possible values: ’batch’\n" + 
+				"(Batch mode), ’gui’ (Graphical User Interface mode). Default value: ’console’.").build());
 		return cmdLineOptions;
 	}
 
@@ -102,7 +104,20 @@ public class Main {
 			setNonDefaultTime(tiempo);
 		}
 	}
+	private static int parseMode(CommandLine line)
+	{
+		int option=1; // 1 significa guimode, 0 batchmode
+		if(line.hasOption("m"))
+		{
+			String s = line.getOptionValue("m");
+			if(s.equals("console"))
+				option=0;
 
+		}
+		return option;
+
+		
+	}
 	private static void initFactories() {
 
 		ArrayList<Builder<LightSwitchingStrategy>> lsbs= new ArrayList<>(); 
@@ -145,28 +160,33 @@ public class Main {
 	{
 		//TODO
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			@Override
 			public void run() {
 				TrafficSimulator sim= new TrafficSimulator();
 				InputStream in = null;
-				try {
-					in = new FileInputStream(new File(_inFile));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
+				//try {
+					//in = new FileInputStream(new File(_inFile));
+					int a;
+				//} catch (FileNotFoundException e) {
+					//e.printStackTrace();
+				//}
 				Controller c= new Controller(sim, Main._eventsFactory);
-				c.loadEvents(in);
+				//c.loadEvents(in);
 				new MainWindow(c);
 			}
 		});
 
 	}
-	private static void start(String[] args) throws IOException {
+	private static void start(String[] args,int option) throws IOException {
+		
 		initFactories();
-		parseArgs(args);
-		startBatchMode();
-		startGUIMode();
+		if(option==1)
+			startGUIMode();
+		else
+		{
+			parseArgs(args);
+			startBatchMode();
+		}
 	}
 
 	private static void setNonDefaultTime(int t)
@@ -182,8 +202,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			start(args);
-		} catch (Exception e) {
+			Options cmdLineOptions = buildOptions();
+			CommandLineParser parser = new DefaultParser();
+			CommandLine line = parser.parse(cmdLineOptions, args);
+			int option = parseMode(line);
+			start(args,option);
+			initFactories();
+			} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
 		}

@@ -31,6 +31,7 @@ public class NewJunctionEventBuilder extends Builder<Event>{
 		JSONArray list = data.getJSONArray("coor");
 		int x = (int) list.get(0);
 		int y = (int) list.get(1);
+
 		
 		JSONObject aux = (JSONObject) data.get("ls_strategy");
 		JSONObject aux2 = (JSONObject) data.get("dq_strategy");

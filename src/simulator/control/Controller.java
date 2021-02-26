@@ -1,6 +1,6 @@
 package simulator.control;
 
-import java.awt.Event;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +13,7 @@ import org.json.JSONTokener;
 import simulator.factories.Factory;
 import simulator.model.TrafficSimObserver;
 import simulator.model.TrafficSimulator;
+import simulator.model.Event;
 
 public class Controller {
 	
@@ -46,7 +47,13 @@ public class Controller {
 		for(int i = 0; i < events.length(); i++) 
 		{
 			sim.addEvent(factoriaEventos.createInstance(events.getJSONObject(i)));
+			
 		}
+	}
+	public void run(int n)
+	{
+	     for (int i = 0; i < n; i++) 
+	    	 this.sim.advance();
 	}
 	public void run(int n,OutputStream out)
 	{
@@ -62,7 +69,7 @@ public class Controller {
 		p.println("  \"states\": [");
 		
 		sim.setTiempo(n);
-		for(int i=0;i<n-1;i++)
+		for(int i=0;i<n;i++)
 		{
 			sim.advance(); 
 			p.print(sim.report());
@@ -90,7 +97,11 @@ public class Controller {
 	}
 	public void addEvent(Event e)
 	{
-		this.addEvent(e);
+		this.sim.addEvent(e);
+	}
+	public TrafficSimulator getTrafficSimulator()
+	{
+		return this.sim;
 	}
 	
 }

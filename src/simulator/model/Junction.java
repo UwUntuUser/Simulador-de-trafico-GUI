@@ -86,13 +86,12 @@ public class Junction extends SimulatedObject{
 	}
 	
 	@Override
-	void advance(int time) {
+	void advance(int time) throws IllegalArgumentException {
 		
 		if(!this.Mapa_Carretera_Cola.isEmpty() && !this.Mapa_Carretera_Cola.get(this.semaforoVerde).isEmpty())
 		{
 			List<Vehicle> lista = new ArrayList<Vehicle>();
 			lista = this.estrategiaExtraer.dequeue(this.ListaColas.get(this.semaforoVerde));
-			System.out.println(this.semaforoVerde);
 			for(int i=0;i<lista.size();i++)
 				{
 					lista.get(i).moveToNextRoad();
@@ -147,7 +146,10 @@ public class Junction extends SimulatedObject{
 		List<Road> incoming = Collections.unmodifiableList(new ArrayList<Road>(this.carreterasEntrantes));
 		return incoming;
 	}
-
+	public Map<Road,List<Vehicle>> getMapaCarreteraCola()
+	{
+		return this.Mapa_Carretera_Cola;
+	}
 	public int getX() {
 		return X;
 	}

@@ -11,9 +11,9 @@ public class NewInterCityRoadEventBuilder extends NewRoadEventBuilder{
 		super("new_inter_city_road");
 	}
 
-	public Event createTheRoad(int time, String id, String src, String dst,int length,int co2, int vel, Weather w) {
+	public Event createTheRoad() {
 		
-		return new NewInterCityRoadEvent(time, id, src,dst,length,co2,vel,w);
+		return new NewInterCityRoadEvent(time, id, src,dest,length,co2,velMax,w);
 	}
 
 }

@@ -71,15 +71,20 @@ public abstract class Road extends SimulatedObject {
 	
 	
 	@Override
-	void advance(int time) {
+	void advance(int time) throws IllegalArgumentException { 
 		
 		this.reduceTotalContamination();
 		this.updateSpeedLimit();
 		for(int i=0;i<this.vehiculos.size();i++)
 		{
-			int vel=this.calculateVehicleSpeed(this.vehiculos.get(i));
-			this.vehiculos.get(i).setSpeed(vel);
-			this.vehiculos.get(i).advance(time);
+			if(this.vehiculos.get(i).getEstado() == VehicleStatus.TRAVELING)
+			{
+				int vel=this.calculateVehicleSpeed(this.vehiculos.get(i));
+				this.vehiculos.get(i).setSpeed(vel);
+				this.vehiculos.get(i).advance(time);
+			}
+			else
+				this.vehiculos.get(i).moveToNextRoad();
 		}
 		Collections.sort(this.vehiculos);
 	}
@@ -87,15 +92,15 @@ public abstract class Road extends SimulatedObject {
 	@Override
 	public JSONObject report() {
 		JSONObject obj = new JSONObject();
-		obj.put("SpeedLimit",this.getLimiteVelocidad());
+		obj.put("speedLimit",this.getLimiteVelocidad());
 		obj.put("id",this.getId());
-		obj.put("Weather", this.getCondicionesAmbientales());
+		obj.put("weather", this.getCondicionesAmbientales());
 		obj.put("co2",this.getContaminacionTotal());
 		List<Vehicle> lista = this.getListaVehiculos();
 		JSONArray aux = new JSONArray();
 		for(Vehicle v : lista)
 			aux.put(v);
-		obj.put("Vehicles", aux); // nueva lista copiada de la original
+		obj.put("vehicles", aux); // nueva lista copiada de la original
 		
 		
 		return obj;
@@ -112,7 +117,7 @@ public abstract class Road extends SimulatedObject {
 	public void addContaminacion(int c) throws IllegalArgumentException
 	{
 		if(c<0)
-			throw new IllegalArgumentException("Estas añadiendo contaminacion negativa!!\n");
+			throw new IllegalArgumentException("Estas añadiendo contaminacion negativa\n");
 		else
 			this.setContaminacionTotal(this.getContaminacionTotal() + c);
 	}

@@ -13,7 +13,7 @@ public class CityRoad extends Road{
 			r=10;
 		else
 			r=2;
-		this.addContaminacion(r);
+		this.modificarContaminacion(-r);
 		if(this.getContaminacionTotal()<0)
 			this.setContaminacionTotal(0);
 		
@@ -29,8 +29,8 @@ public class CityRoad extends Road{
 		//(int)(((11.0-f)/11.0)*s)
 		int f=v.getGradoContaminacion();
 		int s=this.getLimiteVelocidad();
-		
-		return (int)(((11.0-f)/11.0)*s);
+		int a=(int)(((11.0-f)/11.0)*s);
+		return a;
 	}
 	
 }
